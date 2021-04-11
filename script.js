@@ -2,7 +2,16 @@
 const mImageContainer = document.getElementById("image-container");
 const mLoader         = document.getElementById("loader");
 
-let   mPhotosArray    = [];  
+let   mPhotosArray    = [];
+
+// Healper function to set attrubutes on DOM elements
+function setAttributes(aElement, aAttrs) // aAttrs is a dictionary tbh
+{
+    for(const iKey in aAttrs)
+    {
+        aElement.setAttribute(iKey, aAttrs[iKey]);
+    }
+}
 
 // Create elements for links and photos then add to DOM
 function displayPhotos() 
@@ -13,14 +22,22 @@ function displayPhotos()
     {
         // Create <a> to link to Unsplash
         const vItem = document.createElement('a');
-        vItem.setAttribute('href', aPhoto.links.html);
-        vItem.setAttribute('target', '_blank');      // open in the new tab
+        // Set attributes for each Item
+        setAttributes(vItem, 
+            {
+                href: aPhoto.links.html,
+                target: '_blank'   // open in the new tab when clicked
+            });
 
         // Create <img> for photo
         const vImg = document.createElement('img');
-        vImg.setAttribute('src', aPhoto.urls.regular);
-        vImg.setAttribute('alt', aPhoto.alt_description);
-        vImg.setAttribute('title', aPhoto.alt_description);
+        // Set sus-attribute for each image
+        setAttributes(vImg, 
+            {
+                src: aPhoto.urls.regular,
+                alt: aPhoto.alt_description,
+                title: aPhoto.alt_description
+            });
 
         // Put <img> inside <a>, then put both inside image-container element
         vItem.appendChild(vImg);
