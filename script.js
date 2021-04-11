@@ -17,7 +17,6 @@ function setAttributes(aElement, aAttrs) // aAttrs is a dictionary tbh
 function displayPhotos() 
 {
     // Run function for each object in mPhotosArray
-    console.log(mPhotosArray);
     mPhotosArray.forEach((aPhoto) =>
     {
         // Create <a> to link to Unsplash
@@ -63,6 +62,18 @@ async function getPhotos()
         console.log(aError);
     }
 }
+
+// Check to see if scrolling near bottom of page, load more images
+window.addEventListener('scroll', () => 
+{
+    if((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 1000))
+    {
+        getPhotos();
+        // console.log('window.innerHeight: ' + window.innerHeight);
+        // console.log('window.scrollY: ' + window.scrollY);
+        // console.log('document.body.offsetHeight - 1000: ' + (document.body.offsetHeight - 1000));
+    }
+});
 
 // On load
 getPhotos();
