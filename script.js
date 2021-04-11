@@ -8,7 +8,8 @@ let   mPhotosArray    = [];
 function displayPhotos() 
 {
     // Run function for each object in mPhotosArray
-    mPhotosArray.forEach((aPhoto) => 
+    console.log(mPhotosArray);
+    mPhotosArray.forEach((aPhoto) =>
     {
         // Create <a> to link to Unsplash
         const vItem = document.createElement('a');
