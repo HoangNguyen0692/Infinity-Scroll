@@ -2,7 +2,28 @@
 const mImageContainer = document.getElementById("image-container");
 const mLoader         = document.getElementById("loader");
 
-let   mPhotosArray    = [];
+// Image-related variables
+let mbReady       = false;
+let mImagesLoaded = 0;
+let mTotalImages  = 0;
+let mPhotosArray  = [];
+
+// Unsplash API
+const mCount  = 30;
+const mApiKey = 'CmYv-esLCAMLm2N3dBVQvWQ8-0zT80jmF1l90Exl160';
+const mApiUrl = `https://api.unsplash.com/photos/random/?client_id=${mApiKey}&count=${mCount}`;
+
+/****************************************************************/
+// Check if all images were done loaded
+function imageLoaded()
+{
+   mImagesLoaded += 1;
+   if (mImagesLoaded == mTotalImages)
+   {
+       mbReady = true;
+       mLoader.hidden = true; // hide the loading icon once we're done loading 
+   }
+}
 
 // Healper function to set attrubutes on DOM elements
 function setAttributes(aElement, aAttrs) // aAttrs is a dictionary tbh
@@ -16,6 +37,10 @@ function setAttributes(aElement, aAttrs) // aAttrs is a dictionary tbh
 // Create elements for links and photos then add to DOM
 function displayPhotos() 
 {
+    // Reassign 0 to number of loaded images since we just request a new array of images
+    mImagesLoaded = 0;
+    // Assign value for total images 
+    mTotalImages = mPhotosArray.length;
     // Run function for each object in mPhotosArray
     mPhotosArray.forEach((aPhoto) =>
     {
@@ -38,16 +63,13 @@ function displayPhotos()
                 title: aPhoto.alt_description
             });
 
+        // Event listener, check when each is done loading
+        vImg.addEventListener('load', imageLoaded);
         // Put <img> inside <a>, then put both inside image-container element
         vItem.appendChild(vImg);
         mImageContainer.appendChild(vItem);
     });
 }
-
-// Unsplash API
-const mCount  = 10;
-const mApiKey = 'CmYv-esLCAMLm2N3dBVQvWQ8-0zT80jmF1l90Exl160';
-const mApiUrl = `https://api.unsplash.com/photos/random/?client_id=${mApiKey}&count=${mCount}`;
 
 // Get photos from Unsplash API
 async function getPhotos() 
@@ -66,12 +88,11 @@ async function getPhotos()
 // Check to see if scrolling near bottom of page, load more images
 window.addEventListener('scroll', () => 
 {
-    if((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 1000))
+    if((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 1000) && 
+    (mbReady == true))
     {
+        mbReady = false;
         getPhotos();
-        // console.log('window.innerHeight: ' + window.innerHeight);
-        // console.log('window.scrollY: ' + window.scrollY);
-        // console.log('document.body.offsetHeight - 1000: ' + (document.body.offsetHeight - 1000));
     }
 });
 
